@@ -42377,7 +42377,7 @@ const reportStatus = message => {
 }; // Update <placeholder> with your Blob service SAS URL string
 
 
-const blobSasUrl = "https://azfileuploadstacc.blob.core.windows.net/?sv=2019-12-12&ss=bfqt&srt=sco&sp=rwdlacupx&se=2020-10-22T06:12:46Z&st=2020-10-21T22:12:46Z&spr=https&sig=hJp7OFnI1oUvD%2F6c8%2BJakfc1eXWrsu6cojlMFRONf%2FA%3D"; // Create a new BlobServiceClient
+const blobSasUrl = "https://azfileuploadstacc.blob.core.windows.net/?sv=2019-12-12&ss=bfqt&srt=sco&sp=rwdlacupx&se=2020-11-05T22:08:11Z&st=2020-10-22T13:08:11Z&spr=https&sig=kG4TR1zmUzaxgI%2Bci1FabaY7gRI2VfPtl1zCCUkTycs%3D"; // Create a new BlobServiceClient
 
 const blobServiceClient = new BlobServiceClient(blobSasUrl); // Create a unique name for the container by 
 // appending the current time to the file name
@@ -42507,7 +42507,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "65188" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "52218" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
