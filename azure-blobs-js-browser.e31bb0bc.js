@@ -42358,16 +42358,16 @@ var _log = require("./log");
 },{"@azure/core-http":"node_modules/@azure/core-http/es/src/coreHttp.js","./BlobServiceClient":"node_modules/@azure/storage-blob/dist-esm/storage-blob/src/BlobServiceClient.js","./Clients":"node_modules/@azure/storage-blob/dist-esm/storage-blob/src/Clients.js","./BlobBatch":"node_modules/@azure/storage-blob/dist-esm/storage-blob/src/BlobBatch.js","./BlobBatchClient":"node_modules/@azure/storage-blob/dist-esm/storage-blob/src/BlobBatchClient.js","./BatchResponse":"node_modules/@azure/storage-blob/dist-esm/storage-blob/src/BatchResponse.js","./StorageBrowserPolicyFactory":"node_modules/@azure/storage-blob/dist-esm/storage-blob/src/StorageBrowserPolicyFactory.js","./credentials/AnonymousCredential":"node_modules/@azure/storage-blob/dist-esm/storage-blob/src/credentials/AnonymousCredential.js","./credentials/Credential":"node_modules/@azure/storage-blob/dist-esm/storage-blob/src/credentials/Credential.js","./models":"node_modules/@azure/storage-blob/dist-esm/storage-blob/src/models.js","./Pipeline":"node_modules/@azure/storage-blob/dist-esm/storage-blob/src/Pipeline.js","./policies/AnonymousCredentialPolicy":"node_modules/@azure/storage-blob/dist-esm/storage-blob/src/policies/AnonymousCredentialPolicy.js","./policies/CredentialPolicy":"node_modules/@azure/storage-blob/dist-esm/storage-blob/src/policies/CredentialPolicy.js","./StorageRetryPolicyFactory":"node_modules/@azure/storage-blob/dist-esm/storage-blob/src/StorageRetryPolicyFactory.js","./generatedModels":"node_modules/@azure/storage-blob/dist-esm/storage-blob/src/generatedModels.js","./log":"node_modules/@azure/storage-blob/dist-esm/storage-blob/src/log.js"}],"index.js":[function(require,module,exports) {
 // index.js
 const {
-  BlobServiceClient
+  BlobServiceClient,
+  BlobClient
 } = require("@azure/storage-blob"); // Now do something interesting with BlobServiceClient
 
 
-const createContainerButton = document.getElementById("create-container-button");
-const deleteContainerButton = document.getElementById("delete-container-button");
 const selectButton = document.getElementById("select-button");
 const fileInput = document.getElementById("file-input");
 const listButton = document.getElementById("list-button");
 const deleteButton = document.getElementById("delete-button");
+const downloadButton = document.getElementById("download-button");
 const status = document.getElementById("status");
 const fileList = document.getElementById("file-list");
 
@@ -42382,32 +42382,9 @@ const blobSasUrl = "https://azfileuploadstacc.blob.core.windows.net/?sv=2019-12-
 const blobServiceClient = new BlobServiceClient(blobSasUrl); // Create a unique name for the container by 
 // appending the current time to the file name
 
-const containerName = "container" + new Date().getTime(); // Get a container client from the BlobServiceClient
+const containerName = "filestorage"; // Get a container client from the BlobServiceClient
 
 const containerClient = blobServiceClient.getContainerClient(containerName);
-
-const createContainer = async () => {
-  try {
-    reportStatus(`Creating container "${containerName}"...`);
-    await containerClient.create();
-    reportStatus(`Done.`);
-  } catch (error) {
-    reportStatus(error.message);
-  }
-};
-
-const deleteContainer = async () => {
-  try {
-    reportStatus(`Deleting container "${containerName}"...`);
-    await containerClient.delete();
-    reportStatus(`Done.`);
-  } catch (error) {
-    reportStatus(error.message);
-  }
-};
-
-createContainerButton.addEventListener("click", createContainer);
-deleteContainerButton.addEventListener("click", deleteContainer);
 
 const listFiles = async () => {
   fileList.size = 0;
@@ -42477,6 +42454,31 @@ const deleteFiles = async () => {
 };
 
 deleteButton.addEventListener("click", deleteFiles);
+
+const downloadFile = async () => {
+  if (fileList.selectedOptions.length > 0) {
+    reportStatus("Downloading files...");
+
+    for (const option of fileList.selectedOptions) {
+      console.log('downloading file:', option.text);
+      const blobClient = containerClient.getBlobClient(option.text);
+      const stream = await blobClient.download();
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(new Blob([stream]));
+      a.setAttribute('download', option.text);
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    }
+
+    reportStatus("Done.");
+  } else {
+    reportStatus("No files selected.");
+  }
+};
+
+downloadButton.addEventListener("click", downloadFile);
+listFiles();
 },{"@azure/storage-blob":"node_modules/@azure/storage-blob/dist-esm/storage-blob/src/index.browser.js"}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
@@ -42505,7 +42507,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "63181" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "49223" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
